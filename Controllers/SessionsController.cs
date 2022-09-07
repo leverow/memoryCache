@@ -7,24 +7,13 @@ using Microsoft.AspNetCore.Mvc;
 public class SessionsController : Controller
 {
     public string SessionKey = ".request.count";
-    public static int Counter = 1;
-    [HttpGet]
-    public IActionResult GetSession()
-    {
-        var session = HttpContext.Session.GetString(SessionKey);
-
-        if(string.IsNullOrWhiteSpace(session))
-            return NotFound();
-
-        return Ok(session);
-    }
     [HttpPost]
     public IActionResult SetSession()
     {
-        if(HttpContext.Session.GetString(SessionKey) is null)
-            Counter = 1;
+        int.TryParse(HttpContext.Session.GetString(SessionKey), out var Counter);
+        HttpContext.Session.SetString(SessionKey, $"{++Counter}");
 
-        HttpContext.Session.SetString(".request.count", (Counter++).ToString());
+        HttpContext.Session.SetString(SessionKey, (Counter++).ToString());
 
         return Accepted();
     }
