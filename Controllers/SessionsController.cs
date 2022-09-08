@@ -12,9 +12,6 @@ public class SessionsController : Controller
     {
         int.TryParse(HttpContext.Session.GetString(SessionKey), out var Counter);
         HttpContext.Session.SetString(SessionKey, $"{++Counter}");
-
-        HttpContext.Session.SetString(SessionKey, (Counter++).ToString());
-
         return Accepted();
     }
 }
